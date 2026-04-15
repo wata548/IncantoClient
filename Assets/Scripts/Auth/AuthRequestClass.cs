@@ -25,9 +25,8 @@ namespace Auth {
 	public enum Status {
 		Success,
 		Fail,
-		OutLimit
 	} 
-
+	
 	public class Result {
 
 		public Status Status { get; set; }
