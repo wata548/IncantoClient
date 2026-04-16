@@ -1,6 +1,7 @@
 using Auth;
 using Extension.SelectableUI;
 using TMPro;
+using UI.Async;
 using UI.Messsage;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,8 +16,8 @@ namespace UI.Auth {
 		private void Invoke() {
 			var mail = _mail.text;
 			var password = _password.text;
-			var result = AuthManager.SignIn(mail, password);
-			MessageManager.Instance.Add(result);
+			var task = AuthManager.SignIn(mail, password);
+			AsyncLoading.Instance.Set(task);
 		}
 		
 		private void Awake() {
@@ -26,15 +27,5 @@ namespace UI.Auth {
 			_back.onClick.AddListener(Hide);
 		}
 
-
-		public override void Show() {
-			base.Show();
-			SelectableUIManager.Instance.Open(Tag);
-		}
-
-		public override void Hide() {
-			base.Hide();
-			SelectableUIManager.Instance.Close();
-		}
 	}
 }

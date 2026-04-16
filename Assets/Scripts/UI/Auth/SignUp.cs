@@ -2,6 +2,7 @@ using System;
 using Auth;
 using Extension.SelectableUI;
 using TMPro;
+using UI.Async;
 using UI.Messsage;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,41 +18,36 @@ namespace UI.Auth {
 		[SerializeField] private Button _send;	
 		[SerializeField] private Button _back;	
 		
-		public override void Hide() {
-			base.Hide();
-			SelectableUIManager.Instance.Close();
-		}
-
-		public override void Show() {
-			base.Show();
-			SelectableUIManager.Instance.Open(Tag);
-		}
-
 		public void Send() {
-			
-			Result message = null;
 			
 			//This process can be skipped; server process this check.
 			//but remain DDos threat, so I check temporary.
-			if (_password.text != _passwordCheck.text)
-				message = new(Status.Fail, "비밀번호 체크에 실패했습니다.");
-			if (_name.text.Length < 3)
-				message = new(Status.Fail, "이름이 너무 짧습니다. (최소 3)");
-			if (_password.text.Length < 8)
-				message = new(Status.Fail, "비밀번호가 너무 짧습니다. (최소 8)");
+			if (_password.text != _passwordCheck.text) {
+				MessageManager.Instance.Add(new(Status.Fail, "비밀번호 체크에 실패했습니다."));
+				return;
+			}
+			if (_name.text.Length < 3) {
+				MessageManager.Instance.Add(new(Status.Fail, "이름이 너무 짧습니다. (최소 3)"));
+				return;
+			}
+
+			if (_password.text.Length < 8) {
+				MessageManager.Instance.Add(new(Status.Fail,  "비밀번호가 너무 짧습니다. (최소 8)"));
+				return;
+			}
 			var args = new SignUpInfo{
 				Name = _name.text,
 				Mail = _mail.text,
 				PassWord = _password.text,
 				TwoFactorAuth = _2fa.text
 			};
-			message ??= AuthManager.SignUp(args);
-			MessageManager.Instance.Add(message);
+			var task = AuthManager.SignUp(args);
+			AsyncLoading.Instance.Set(task);
 		}
 
 		public void TwoFactorAuthorization() {
-			var mail = AuthManager.Check2Fa(_mail.text);
-			MessageManager.Instance.Add(mail);
+			var task = AuthManager.Check2Fa(_mail.text);
+			AsyncLoading.Instance.Set(task);
 		}
 		
 		

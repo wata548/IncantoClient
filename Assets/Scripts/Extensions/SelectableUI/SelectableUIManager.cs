@@ -29,7 +29,10 @@ namespace Extension.SelectableUI {
 			if (_tagStack.Count == 0)
 				return;	
 			var tag = _tagStack.Peek();
-			var target = _tagUIs[tag].ElementAt(_idx).Value;
+			if (!_tagUIs.TryGetValue(tag, out var uis) || uis.Count == 0)
+				return;
+			
+			var target = uis.ElementAt(_idx).Value;
 			var selectable = target.GetComponent<Selectable>()!;
 			EventSystem.current.SetSelectedGameObject(selectable.gameObject);	
 		}

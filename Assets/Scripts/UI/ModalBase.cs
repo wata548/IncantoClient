@@ -1,3 +1,4 @@
+using Extension.SelectableUI;
 using Extension.Test;
 using UnityEngine;
 
@@ -23,11 +24,13 @@ namespace UI {
 		public virtual void Show() {
 			IsActive = true;
 			_panel.SetActive(true);
+			SelectableUIManager.Instance.Open(Tag);
 		}
 		
 		public virtual void Hide() {
 			IsActive = false;
 			_panel.SetActive(false);
+			SelectableUIManager.Instance.Close();
 		}
 	}
 }
