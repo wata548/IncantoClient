@@ -1,7 +1,6 @@
-using System;
+using System.Collections;
 using Auth;
 using ObjectPool;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +8,7 @@ namespace UI.Messsage {
 	[RequireComponent(typeof(Image))]
 	[RequireComponent(typeof(Button))]
 	public class Message: ObjectBase<Result> {
-		[SerializeField] private TMP_Text _text;
+		[SerializeField] private Text _text;
 		[SerializeField] private Outline _outline;
 		private RectTransform _rect;
 
@@ -24,6 +23,13 @@ namespace UI.Messsage {
 				? Color.green
 				: Color.red;
 			_text.text = $"{pData.Status}: {pData.Context}";
+			
+			StartCoroutine(Wait());
+
+			IEnumerator Wait() {
+				yield return new WaitForSeconds(3f); 
+				Hide();
+			}
 		}
 
 		public void UpdatePos(float pPos, float pLength) {

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ObjectPool {
 	public abstract class ObjectPoolBase<TO, TD> where TO: class, IObject<TD> {
 		private readonly Queue<TO> _objectPool = new();
-		private readonly List<TO> _curObjects = new();
+		private List<TO> _curObjects = new();
 		protected IEnumerable<TO> GetObjects => _curObjects;
 
 		protected abstract TO GenerateInstance();
@@ -18,6 +19,7 @@ namespace ObjectPool {
 				target = _objectPool.Dequeue();
 			
 			target.Set(pData);
+			target.OnAppear();
 			_curObjects.Add(target);
 			Update();
 			return;
@@ -30,6 +32,7 @@ namespace ObjectPool {
 
 		private void Update() {
 			var idx = 0;
+			_curObjects = _curObjects.Where(obj => obj.IsExist).ToList();
 			foreach (var obj in _curObjects) {
 				Update(obj, idx);
 				idx++;

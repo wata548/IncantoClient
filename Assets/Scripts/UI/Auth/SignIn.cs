@@ -1,5 +1,7 @@
 using Auth;
+using Extension.SelectableUI;
 using TMPro;
+using UI.Messsage;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,14 +15,26 @@ namespace UI.Auth {
 		private void Invoke() {
 			var mail = _mail.text;
 			var password = _password.text;
-			AuthManager.SignIn(mail, password);
+			var result = AuthManager.SignIn(mail, password);
+			MessageManager.Instance.Add(result);
 		}
 		
 		private void Awake() {
-			_mail.contentType = TMP_InputField.ContentType.Standard;
+			_mail.contentType = TMP_InputField.ContentType.EmailAddress;
 			_password.contentType = TMP_InputField.ContentType.Password;
 			_invoke.onClick.AddListener(Invoke);
 			_back.onClick.AddListener(Hide);
+		}
+
+
+		public override void Show() {
+			base.Show();
+			SelectableUIManager.Instance.Open(Tag);
+		}
+
+		public override void Hide() {
+			base.Hide();
+			SelectableUIManager.Instance.Close();
 		}
 	}
 }

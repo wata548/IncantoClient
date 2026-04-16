@@ -9,8 +9,8 @@ namespace ObjectPool {
 
 		public virtual void Init(Action<IObject<T>> pPushPool) {
 			_pushPool = null;
-			_pushPool += pPushPool;
 			_pushPool += obj => obj.OnHide();
+			_pushPool += pPushPool;
 		}
 
 		public abstract void Set(T pArg);
