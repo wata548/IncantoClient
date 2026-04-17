@@ -20,12 +20,12 @@ namespace UI.Auth {
 			AsyncLoading.Instance.Set(task);
 		}
 		
-		private void Awake() {
+		protected override void Awake() {
+			base.Awake();
 			_mail.contentType = TMP_InputField.ContentType.EmailAddress;
 			_password.contentType = TMP_InputField.ContentType.Password;
 			_invoke.onClick.AddListener(Invoke);
 			_back.onClick.AddListener(Hide);
 		}
-
 	}
 }

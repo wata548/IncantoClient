@@ -51,7 +51,8 @@ namespace UI.Auth {
 		}
 		
 		
-		private void Awake() {
+		protected override void Awake() {
+			base.Awake();
 			_mail.contentType = TMP_InputField.ContentType.EmailAddress;
 			_password.contentType = TMP_InputField.ContentType.Password;
 			_passwordCheck.contentType = TMP_InputField.ContentType.Password;

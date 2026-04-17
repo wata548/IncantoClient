@@ -15,11 +15,15 @@ namespace Auth {
 	public static class AuthManager {
 		private static readonly HttpClient Client = new();
 		private static readonly Uri ServerAddress = new("https://incanto.o-r.kr:7272");
-		private static AccountToken AccountToken;
+		public static AccountToken AccountToken { get; private set; }
 		private static AsyncDataBase<Result> _task = null;
 		public static Result Result =>
 			_task?.Value;
 
+		public static void LogOut() {
+			AccountToken = null;
+		}
+		
 		private static AsyncDataBase<Result> Call(string pReq, HttpContent pArgs) {
 			return new AsyncData<string, Result>(CallAsync(), JsonConvert.DeserializeObject<Result>);
 			

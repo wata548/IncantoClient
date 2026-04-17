@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -35,6 +36,12 @@ namespace Extension.SelectableUI {
 			var target = uis.ElementAt(_idx).Value;
 			var selectable = target.GetComponent<Selectable>()!;
 			EventSystem.current.SetSelectedGameObject(selectable.gameObject);	
+		}
+
+		public void Clear(Action<string> pAction) {
+			while (_tagStack.TryPop(out var value)) {
+				pAction?.Invoke(value);
+			}
 		}
 		
 		public void Next() {
