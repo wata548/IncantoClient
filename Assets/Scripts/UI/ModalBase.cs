@@ -56,7 +56,7 @@ namespace UI {
 
 		protected virtual void Awake() {
 			IsActive = _panel.activeSelf;
-			_modals.Add(Tag, this);
+			_modals[Tag] = this;
 		}
 	}
 }

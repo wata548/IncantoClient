@@ -12,9 +12,7 @@ namespace Extension {
 				var data = GetData();
 				if (data == null)
 					return null;
-				_value = CallBackTToT == null 
-					? GetData() 
-					: CallBackTToT(GetData());
+				_value = CallBackTToT?.Invoke(data) ?? data;
 				return _value;
 			}	
 		}
