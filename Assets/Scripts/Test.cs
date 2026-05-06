@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
 using System.Text;
+using System.Threading.Tasks;
 using Auth;
 using Extension.Test;
+using Networking;
 using UnityEngine;
 
 namespace DefaultNamespace {
@@ -16,6 +19,24 @@ namespace DefaultNamespace {
 			Debug.Log(data.ToString());
 		}
 
+		[TestMethod]
+		private static void DataSendTest() {
+			var data = new Packet() {
+				Id = 4,
+				Args = new[] { new ValueData<int> { Value = 1 } }
+			};
+			var bytes = Packet.Serialize(data);
+			Debug.Log(Encoding.UTF8.GetString(bytes));
+		}
+
+		[TestMethod]
+		private static void TestUDPAccuracy(int pCnt) {
+			var a = new DataModule();
+			for (int i = 1; i <= pCnt; i++) {
+				a.SendRaw(i);
+			}
+		}
+		
 		[TestMethod]
 		private static void Circle(int pSize) {
 			const string Biomes = "⬛⬜";

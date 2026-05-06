@@ -19,30 +19,29 @@ namespace Extension {
 
 		private T _value = null;
 		public abstract TaskStatus Status { get; }
-
 		protected abstract T GetData();
 		public event Func<T, T> CallBackTToT;
 	} 
 	
 	public class AsyncData<TOut, TValue>: AsyncDataBase<TValue> 
 		where TOut : class 
-		where TValue: class 
-	{
-		public Task<TOut> Task { get; }
+		where TValue: class {
+		
+		private readonly Task<TOut> _task;
 		public event Func<TOut, TValue> CallBackOutToValue;
 
 		public AsyncData(Task<TOut> pTask, Func<TOut, TValue> pCallBack) {
-			Task = pTask;
+			_task = pTask;
 			CallBackOutToValue = pCallBack;
 		}
 
-		public override TaskStatus Status => Task.Status;
+		public override TaskStatus Status => _task.Status;
 
 		protected override TValue GetData() {
-			if (!Task.IsCompleted)
+			if (!_task.IsCompleted)
 				return null;
-			var value = Task.Result;
-			return CallBackOutToValue(value);
+			var value = _task.Result;
+			return CallBackOutToValue!(value);
 		}
 	}
 }

@@ -54,11 +54,18 @@ namespace UI.Async {
 		}
 
 		private void MessageUpdate() {
-			if (_task.Value == null)
-				return;
+			try {
+				if (_task.Value == null)
+					return;
+
+				MessageManager.Instance.Add(_task.Value);
+				_task = null;
+			}
+			catch {
+				_task = null;
+				MessageManager.Instance.Add(new(Status.Fail, "오류가 발생했습니다."));
+			}
 			
-			MessageManager.Instance.Add(_task.Value);
-			_task = null;	
 		}
 		
 		

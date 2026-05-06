@@ -6,6 +6,7 @@ using UnityEngine.UI;
 namespace UI.Auth {
 	public class AccountPage: ModalBase {
 		[SerializeField] private TMP_Text _name;
+		[SerializeField] private TMP_Text _id;
 		[SerializeField] private Button _enterMatch;
 		[SerializeField] private Button _logout;
 		private const string NameFormat = "{0}\n<size=70%>{1}</size>";
@@ -16,6 +17,7 @@ namespace UI.Auth {
 				AuthManager.AccountToken.Name,
 				AuthManager.AccountToken.Mail
 			);
+			_id.text = $"#{AuthManager.AccountToken.Id:D10}";
 		}
 		
 		protected override void Awake() {
