@@ -32,6 +32,6 @@ Material:
     - _Radius: 0.07
     m_Colors:
     - _Color: {r: 1, g: 0, b: 0, a: 1}
-    - _Pos: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _Pos: {r: 0.95771146, g: 0.48247483, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
