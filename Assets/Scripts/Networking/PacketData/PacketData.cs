@@ -72,7 +72,6 @@ namespace Networking {
     }
 
     public class PlayerData: IPacketData {
-        
       public InputFlags Input { get; set; }
       public VectorData Pos { get; set; }
       public VectorData Rotation { get; set; }
@@ -80,5 +79,4 @@ namespace Networking {
       public string Paint { get; set; }
       public bool IsPainting { get; set; }
     } 
-    
 }
