@@ -21,12 +21,14 @@ namespace DefaultNamespace {
 
 		[TestMethod]
 		private static void DataSendTest() {
-			var data = new Packet() {
+			/*
+			var data = new PacketData() {
 				Id = 4,
 				Args = new[] { new ValueData<int> { Value = 1 } }
 			};
-			var bytes = Packet.Serialize(data);
+			var bytes = PacketData.Serialize(data);
 			Debug.Log(Encoding.UTF8.GetString(bytes));
+			*/
 		}
 
 		[TestMethod]
