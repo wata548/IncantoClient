@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Networking;
 using UnityEngine;
 
-namespace Test {
+namespace InGame {
 	public class InputChecker {
 
 		//==================================================Fields	
@@ -22,7 +22,7 @@ namespace Test {
 			var result = default(InputFlags);
 			foreach (var (key, data) in _inputs) {
 				if (data.IsClick())
-					result |= (InputFlags)data.Code;
+					result |= key;
 			}
 			return result;
 		}
@@ -45,8 +45,8 @@ namespace Test {
 			
 			public bool IsClick() =>
 				ClickType 
-					? Input.GetKeyDown(Code) 
-					: Input.GetKey(Code);
+					? UnityEngine.Input.GetKeyDown(Code) 
+					: UnityEngine.Input.GetKey(Code);
 		}
 
 	}

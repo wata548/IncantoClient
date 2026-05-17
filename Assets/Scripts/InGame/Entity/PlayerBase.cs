@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Entity {
+namespace InGame.Entity {
     public abstract class PlayerBase: MonoBehaviour {
         [SerializeField] private int _maxHp = 100;
         public EntityData Data { get; private set; }

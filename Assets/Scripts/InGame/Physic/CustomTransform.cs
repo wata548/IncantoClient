@@ -3,13 +3,13 @@ using Extensions;
 using Networking;
 using UnityEngine;
 
-namespace Physic {
+namespace InGame.Physic {
 	public class CustomTransform {
 		
 		//==================================================Properties	
 		public Vector Velocity { get; private set; }
 		public Vector Position { get; private set; }
-		public Vector Rotation { get; private set; }
+		public float Rotation { get; private set; }
 		private readonly Transform Transform;
 
 		//==================================================Constructors	
@@ -17,7 +17,7 @@ namespace Physic {
 			Transform = pTransform;
 			Velocity = new();
 			Position = pTransform.position.ToCustomVector();
-			Rotation = pTransform.rotation.eulerAngles.ToCustomVector();
+			Rotation = pTransform.rotation.y;
 		}
 		
 		//==================================================Methods	
@@ -25,7 +25,7 @@ namespace Physic {
 			var pos = pData.Pos.ToUnityVector();
 			pos += Transform.localScale / 2f;
 			Transform.position = pos;
-			Transform.rotation = Quaternion.Euler(pData.Rotation.ToUnityVector());
+			Transform.rotation = Quaternion.Euler(0, pData.Rotation, 0);
 			
 			Velocity = pData.Velocity;
 			Position = pData.Pos;

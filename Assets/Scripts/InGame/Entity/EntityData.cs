@@ -1,10 +1,8 @@
 using System;
-using Entity;
-using Networking;
-using Physic;
+using InGame.Physic;
 using UnityEngine;
 
-namespace Entity {
+namespace InGame.Entity {
 	public class EntityData {
         
 		//==================================================||Events 
