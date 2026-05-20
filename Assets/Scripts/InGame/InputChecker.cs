@@ -45,9 +45,8 @@ namespace InGame {
 			
 			public bool IsClick() =>
 				ClickType 
-					? UnityEngine.Input.GetKeyDown(Code) 
-					: UnityEngine.Input.GetKey(Code);
+					? Input.GetKeyDown(Code) 
+					: Input.GetKey(Code);
 		}
-
 	}
 }

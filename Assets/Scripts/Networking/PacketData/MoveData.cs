@@ -25,6 +25,7 @@ namespace Networking {
 	public class MoveData: PacketData {
 		public InputFlags Input { get; set; }
 		public Vector Pos { get; set; }
+		public float Radius { get; set; }
 		public float Rotation { get; set; }
 		public Vector Velocity { get; set; }
 		public Vector MouseDelta { get; set; }
@@ -35,6 +36,7 @@ namespace Networking {
 			result.AddRange(base.GetBytes());
 			result.AddRange(BitConverter.GetBytes((int)Input));
 			result.AddRange(Pos.GetBytes());
+			result.AddRange(BitConverter.GetBytes(Radius));
 			result.AddRange(BitConverter.GetBytes(Rotation));
 			result.AddRange(Velocity.GetBytes());
 			result.AddRange(MouseDelta.GetBytes());
@@ -47,6 +49,7 @@ namespace Networking {
 			:base(pBytes, ref pStart){
 			Input = (InputFlags)GetInt(pBytes, ref pStart);
 			Pos = new Vector(pBytes, ref pStart);
+			Radius = GetSingle(pBytes, ref pStart);
 			Rotation = GetSingle(pBytes, ref pStart);
 			Velocity = new Vector(pBytes, ref pStart);
 			MouseDelta = new Vector(pBytes, ref pStart);

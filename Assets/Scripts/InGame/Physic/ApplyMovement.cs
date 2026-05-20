@@ -14,9 +14,6 @@ namespace InGame.Physic {
 		protected static DataModule _module = new();
 		protected Vector _velocity = new();
 		
-		//==================================================||Protected	
-		protected Vector3 _halfHeight => new(0, transform.localScale.y / 2f, 0);
-
 		//==================================================||Methods	
 		protected virtual InputFlags GetInput() => default;
 		
@@ -25,7 +22,6 @@ namespace InGame.Physic {
 				return;
 			var moveData = (pPacket as MoveData)!;
 			var pos = moveData.Pos.ToUnityVector();
-			pos += _halfHeight;
 			transform.position = pos;
 			_velocity = moveData.Velocity;
 			transform.rotation = Quaternion.Euler(0, moveData.Rotation, 0);
@@ -38,8 +34,6 @@ namespace InGame.Physic {
 		
 		protected virtual void Update() {
 			_module.Update();
-			
-			
 		}
 	}
 }
