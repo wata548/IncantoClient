@@ -11,6 +11,10 @@ namespace Extension.SelectableUI {
 	public class SelectableUIManager: MonoSingleton<SelectableUIManager> {
 		protected override bool IsNarrowSingleton => false;
 
+		public string Tag => _tagStack.Count == 0
+			? ""
+			: _tagStack.Peek();
+
 		private readonly Dictionary<string, SortedList<Vector2, SelectableUI>> _tagUIs = new();
 		private Stack<string> _tagStack = new();
 		private int _idx = 0; 
@@ -34,8 +38,7 @@ namespace Extension.SelectableUI {
 				return;
 			
 			var target = uis.ElementAt(_idx).Value;
-			var selectable = target.GetComponent<Selectable>()!;
-			EventSystem.current.SetSelectedGameObject(selectable.gameObject);	
+			EventSystem.current.SetSelectedGameObject(target.gameObject);	
 		}
 
 		public void Clear(Action<string> pAction) {

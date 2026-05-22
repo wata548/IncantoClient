@@ -1,4 +1,5 @@
 using System.Linq;
+using DefaultNamespace;
 using Extensions;
 using Networking;
 using UnityEngine;
@@ -40,7 +41,7 @@ namespace InGame.Physic {
 			if (_remainTime > 0)
 				return;
             
-			_remainTime = UpdateTerm;
+			_remainTime = ServerSetting.UpdateTerm;
 			DataSend();
 		}
         
@@ -48,7 +49,7 @@ namespace InGame.Physic {
 		private void OnDrawGizmos() {
 			Gizmos.color = Color.red;
 			Gizmos.DrawSphere(
-				transform.position + _velocity.ToUnityVector() * 1 / 30f, 
+				transform.position + _velocity.ToUnityVector() * ServerSetting.UpdateTerm, 
 				transform.localScale.x / 2f
 			);
 		}

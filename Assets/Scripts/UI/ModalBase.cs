@@ -23,6 +23,15 @@ namespace UI {
 
 		public static void Clear() =>
 			SelectableUIManager.Instance.Clear(v => GetModal(v)?.ClearProcess());
+
+		public static void Close() {
+			var tag = SelectableUIManager.Instance.Tag;
+			if (string.IsNullOrWhiteSpace(tag))
+				return;
+
+			if (_modals.TryGetValue(tag, out var modal))
+				modal.Hide();
+		}
 		
 #if UNITY_EDITOR
 		[TestMethod]

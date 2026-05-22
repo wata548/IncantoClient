@@ -1,27 +1,39 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using DefaultNamespace;
 using Extension;
+using Networking;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Auth {
 	
 	
-	public static class AuthManager {
-		private static readonly HttpClient Client = new();
-		private static readonly Uri ServerAddress = new("https://incanto.o-r.kr:7272");
-		public static AccountToken AccountToken { get; private set; }
-		private static AsyncDataBase<Result> _task = null;
-		public static Result Result =>
+	public class AuthManager: MonoSingleton<AuthManager> {
+		//==================================================Properties	
+		protected override bool IsNarrowSingleton => false;
+		public bool IsMatchMaking { get; private set; } = false; 
+		public AccountToken AccountToken { get; private set; }
+		public Result Result =>
 			_task?.Value;
 
-		public static void LogOut() {
+
+		//==================================================Fields	
+		private readonly HttpClient Client = new();
+		private readonly Uri ServerAddress = new("https://incanto.o-r.kr:7272");
+		private AsyncDataBase<Result> _task = null;
+		private DataModule _module; 
+		private float _remainTime = ServerSetting.UpdateTerm;
+		
+		//==================================================Methods
+		public void LogOut() {
 			AccountToken = null;
 		}
 		
-		private static AsyncDataBase<Result> Call(string pReq, HttpContent pArgs) {
+		private AsyncDataBase<Result> Call(string pReq, HttpContent pArgs) {
 			return new AsyncData<string, Result>(CallAsync(), JsonConvert.DeserializeObject<Result>);
 			
 			async Task<string> CallAsync() {
@@ -31,8 +43,7 @@ namespace Auth {
 			}
 		}
 		
-
-		private static Result LoginProcess(Result pResult) {
+		private Result LoginProcess(Result pResult) {
 			if (pResult.Status == Status.Success) {
 				Debug.Log(pResult.Context);
 				AccountToken = JsonConvert.DeserializeObject<AccountToken>(pResult.Context);
@@ -42,8 +53,8 @@ namespace Auth {
 		} 
 		
 		
-		public static AsyncDataBase<Result> SignIn(string pMail, string pPassword ) {
-			var info = new SignUpInfo() {
+		public AsyncDataBase<Result> SignIn(string pMail, string pPassword ) {
+			var info = new SignUpInfo {
 				Mail = pMail,
 				PassWord = pPassword
 			};
@@ -53,17 +64,57 @@ namespace Auth {
 			return result;
 		}
 
-		public static AsyncDataBase<Result> Check2Fa(string pMail) {
-			var info = new SignUpInfo() { Mail = pMail };
+		public AsyncDataBase<Result> Check2Fa(string pMail) {
+			var info = new SignUpInfo { Mail = pMail };
 			var content = new StringContent(info.ToString(), Encoding.UTF8, "application/json");
 			return Call("2fa", content);	
 		}
 
-		public static AsyncDataBase<Result> SignUp(SignUpInfo pInfo) {
+		public AsyncDataBase<Result> SignUp(SignUpInfo pInfo) {
 			var content = new StringContent(pInfo.ToString(), Encoding.UTF8, "application/json");
 			var result = Call("SignUp", content);	
 			result.CallBackTToT += LoginProcess;
 			return result;
+		}
+		
+		public AsyncDataBase<Result> EnterMatchMaking(AccountToken pToken) {
+			var content = new StringContent(pToken.ToString(), Encoding.UTF8, "application/json");
+			var result = Call("JoinMatch", content);
+			result.CallBackTToT += r => {
+				if (r.Status == Status.Success)
+					IsMatchMaking = true;
+				return r;
+			};
+			return result;
+		}
+
+		public AsyncDataBase<Result> QuitMatchMaking(AccountToken pToken) {
+			var content = new StringContent(pToken.ToString(), Encoding.UTF8, "application/json");
+			var result = Call("ExitMatch", content);
+			result.CallBackTToT += r => {
+				if (r.Status == Status.Success)
+					IsMatchMaking = false;
+				return r;
+			};
+			return result;
+		}
+
+		//==================================================Unity
+		private void Update() {
+			if (!IsMatchMaking)
+				return;
+			if (_remainTime > 0) {
+				_remainTime -= Time.deltaTime;
+				return;
+			}
+
+			_remainTime = ServerSetting.UpdateTerm;
+			var natPunch = new PacketData {
+				Command = PacketCommand.NATPunch,
+				Id = AccountToken.Id
+			};
+			var bytes = natPunch.GetBytes().ToArray();
+			_module.Send(bytes);
 		}
 	}
 }

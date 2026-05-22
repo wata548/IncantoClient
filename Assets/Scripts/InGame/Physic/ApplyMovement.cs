@@ -6,10 +6,7 @@ using UnityEngine;
 
 namespace InGame.Physic {
 	public class ApplyMovement: MonoBehaviour {
-		
 		//==================================================||Fields	
-		protected const int FrameCnt = 30;
-		protected const float UpdateTerm = 1f / FrameCnt;
 		
 		protected static DataModule _module = new();
 		protected Vector _velocity = new();

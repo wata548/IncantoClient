@@ -1,6 +1,4 @@
-using System;
 using Auth;
-using Extension.SelectableUI;
 using TMPro;
 using UI.Async;
 using UI.Messsage;
@@ -41,12 +39,12 @@ namespace UI.Auth {
 				PassWord = _password.text,
 				TwoFactorAuth = _2fa.text
 			};
-			var task = AuthManager.SignUp(args);
+			var task = AuthManager.Instance.SignUp(args);
 			AsyncLoading.Instance.Set(task);
 		}
 
 		public void TwoFactorAuthorization() {
-			var task = AuthManager.Check2Fa(_mail.text);
+			var task = AuthManager.Instance.Check2Fa(_mail.text);
 			AsyncLoading.Instance.Set(task);
 		}
 		

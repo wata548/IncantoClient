@@ -19,8 +19,6 @@ namespace UI.Messsage {
 
 		private void Awake() {
 
-		
-
 			var height = 1f / (_limit * (1 + _interval));
 			
 			var rect = (transform as RectTransform)!;

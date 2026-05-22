@@ -1,5 +1,6 @@
 using Auth;
 using TMPro;
+using UI.Async;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,16 +15,21 @@ namespace UI.Auth {
 		public override void Show() {
 			base.Show();
 			_name.text = string.Format(NameFormat,
-				AuthManager.AccountToken.Name,
-				AuthManager.AccountToken.Mail
+				AuthManager.Instance.AccountToken.Name,
+				AuthManager.Instance.AccountToken.Mail
 			);
-			_id.text = $"#{AuthManager.AccountToken.Id:D10}";
+			_id.text = $"#{AuthManager.Instance.AccountToken.Id:D10}";
+		}
+
+		private void EnterMatch() {
+			var task =AuthManager.Instance.EnterMatchMaking(AuthManager.Instance.AccountToken);
+			AsyncLoading.Instance.Set(task);
 		}
 		
 		protected override void Awake() {
 			base.Awake();
-			_enterMatch.onClick.AddListener(null);		
-			_logout.onClick.AddListener(AuthManager.LogOut);		
+			_enterMatch.onClick.AddListener(EnterMatch);		
+			_logout.onClick.AddListener(AuthManager.Instance.LogOut);		
 		}
 	}
 }
