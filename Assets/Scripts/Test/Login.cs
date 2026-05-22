@@ -10,7 +10,7 @@ public class Login: MonoBehaviour {
 	[SerializeField] private Button _button;
 
 	private void ExampleLogin() =>
-		AsyncLoading.Instance.Set(AuthManager.Instance.SignIn(_mail, _password));
+		AsyncLoading.Instance.Set(AuthConnection.Instance.SignIn(_mail, _password));
 
 	private void Awake() =>
 		_button.onClick.AddListener(ExampleLogin);

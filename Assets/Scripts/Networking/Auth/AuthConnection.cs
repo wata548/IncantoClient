@@ -10,22 +10,14 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Auth {
-	
-	
-	public class AuthManager: MonoSingleton<AuthManager> {
+	public class AuthConnection: MonoSingleton<AuthConnection> {
 		//==================================================Properties	
-		protected override bool IsNarrowSingleton => false;
 		public bool IsMatchMaking { get; private set; } = false; 
 		public AccountToken AccountToken { get; private set; }
-		public Result Result =>
-			_task?.Value;
-
 
 		//==================================================Fields	
-		private readonly HttpClient Client = new();
-		private readonly Uri ServerAddress = new("https://incanto.o-r.kr:7272");
-		private AsyncDataBase<Result> _task = null;
-		private DataModule _module; 
+		private readonly HttpClient _client = new();
+		private readonly Uri _serverAddress = new("https://incanto.o-r.kr:7272");
 		private float _remainTime = ServerSetting.UpdateTerm;
 		
 		//==================================================Methods
@@ -37,7 +29,7 @@ namespace Auth {
 			return new AsyncData<string, Result>(CallAsync(), JsonConvert.DeserializeObject<Result>);
 			
 			async Task<string> CallAsync() {
-				var res = await Client.PostAsync(new Uri(ServerAddress,pReq), pArgs);
+				var res = await _client.PostAsync(new Uri(_serverAddress,pReq), pArgs);
 				var ouput = await res.Content.ReadAsStringAsync();
 				return ouput;
 			}
@@ -99,22 +91,38 @@ namespace Auth {
 			return result;
 		}
 
-		//==================================================Unity
-		private void Update() {
+		private void WaitMatchMaking() {
 			if (!IsMatchMaking)
 				return;
 			if (_remainTime > 0) {
 				_remainTime -= Time.deltaTime;
 				return;
 			}
-
+            
 			_remainTime = ServerSetting.UpdateTerm;
 			var natPunch = new PacketData {
 				Command = PacketCommand.NATPunch,
 				Id = AccountToken.Id
 			};
 			var bytes = natPunch.GetBytes().ToArray();
-			_module.Send(bytes);
+			LogicConnection.Instance.Send(bytes);
+		}
+
+		private void Receive(PacketData pPacketData) {
+			switch(pPacketData) {
+				case GameStart start:
+					IsMatchMaking = false;
+					break;
+			}
+		}
+
+		//==================================================Unity
+		private void Awake() {
+			LogicConnection.Instance.OnReceive += Receive;
+		}
+		
+		private void Update() {
+			WaitMatchMaking();		
 		}
 	}
 }

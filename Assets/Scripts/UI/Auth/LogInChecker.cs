@@ -11,7 +11,7 @@ namespace UI.Auth {
 		[SerializeField] private string _matchMakingScreen = "MatchMaking";
 
 		private void UpdateLoginUI() {
-			var temp = AuthManager.Instance.AccountToken != null;
+			var temp = AuthConnection.Instance.AccountToken != null;
 			if (_login == temp)
 				return;
 			_login = temp;
@@ -25,7 +25,7 @@ namespace UI.Auth {
 			}
 		}
 		private void UpdateMatchMakingUI() {
-			if (_waitMatchMaking == AuthManager.Instance.IsMatchMaking)
+			if (_waitMatchMaking == AuthConnection.Instance.IsMatchMaking)
 				return;
 
 			_waitMatchMaking = !_waitMatchMaking;

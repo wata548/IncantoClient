@@ -5,10 +5,12 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Extension;
+using Extensions;
 
 namespace Networking {
-	public class DataModule: IDisposable {
-        
+	public class LogicConnection: MonoSingleton<LogicConnection>, IDisposable {
+
 		//==================================================||Fields 
 		public const string ServerIp = "1.237.69.214";
 		public const int ServerPort = 51321;
@@ -22,7 +24,7 @@ namespace Networking {
  
 		//==================================================||Constructors 
 		
-		public DataModule() {
+		public LogicConnection() {
 			_serverAddress = new IPEndPoint(IPAddress.Parse(ServerIp), ServerPort);
 			_client = new();
 			_receiveTokenSource = new CancellationTokenSource();
@@ -56,13 +58,19 @@ namespace Networking {
 			_client.Close();
 			_client.Dispose();
 		}
+		
+		//==================================================||Unity	
+		private void OnDestroy() {
+			Dispose();
+		}
 
-		public void Update() {
+		private void Update() {
 			while (!_receives.IsEmpty) {
 				if(!_receives.TryDequeue(out var data))
 					continue;
-				OnReceive.Invoke(PacketData.Generate(data));			
+				OnReceive?.Invoke(PacketData.Generate(data));			
 			}
-		} 
+		}
+
 	}
 }

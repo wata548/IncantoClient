@@ -10,6 +10,7 @@ using UnityEngine;
 namespace UI.Async {
 	public class AsyncLoading: MonoSingleton<AsyncLoading> {
 		protected override bool IsNarrowSingleton => true;
+		protected override bool AllowAutoGen => false;
 
 		//==================================================|| Fields	
 		[SerializeField] private string _tag;

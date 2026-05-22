@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Extension.SelectableUI {
 	public class SelectableUIManager: MonoSingleton<SelectableUIManager> {
-		protected override bool IsNarrowSingleton => false;
 
 		public string Tag => _tagStack.Count == 0
 			? ""

@@ -16,7 +16,7 @@ namespace UI.Auth {
 		private void Invoke() {
 			var mail = _mail.text;
 			var password = _password.text;
-			var task = AuthManager.Instance.SignIn(mail, password);
+			var task = AuthConnection.Instance.SignIn(mail, password);
 			AsyncLoading.Instance.Set(task);
 		}
 		

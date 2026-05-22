@@ -15,21 +15,21 @@ namespace UI.Auth {
 		public override void Show() {
 			base.Show();
 			_name.text = string.Format(NameFormat,
-				AuthManager.Instance.AccountToken.Name,
-				AuthManager.Instance.AccountToken.Mail
+				AuthConnection.Instance.AccountToken.Name,
+				AuthConnection.Instance.AccountToken.Mail
 			);
-			_id.text = $"#{AuthManager.Instance.AccountToken.Id:D10}";
+			_id.text = $"#{AuthConnection.Instance.AccountToken.Id:D10}";
 		}
 
 		private void EnterMatch() {
-			var task =AuthManager.Instance.EnterMatchMaking(AuthManager.Instance.AccountToken);
+			var task =AuthConnection.Instance.EnterMatchMaking(AuthConnection.Instance.AccountToken);
 			AsyncLoading.Instance.Set(task);
 		}
 		
 		protected override void Awake() {
 			base.Awake();
 			_enterMatch.onClick.AddListener(EnterMatch);		
-			_logout.onClick.AddListener(AuthManager.Instance.LogOut);		
+			_logout.onClick.AddListener(AuthConnection.Instance.LogOut);		
 		}
 	}
 }

@@ -30,13 +30,11 @@ namespace InGame.Physic {
 				Rotation = rotation.y
 			};
 			var data = packet.GetBytes().ToArray();
-			_module.Send(data);	
+			LogicConnection.Instance.Send(data);	
 		}
 
 		//==================================================||Unity	
-		protected override void Update() {
-			base.Update();
-			
+		private void Update() {
 			_remainTime -= Time.deltaTime;
 			if (_remainTime > 0)
 				return;

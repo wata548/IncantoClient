@@ -8,7 +8,7 @@ namespace UI.Auth {
 		[SerializeField] private Button _quit;
 
 		private void QuitMatch() {
-			var task = AuthManager.Instance.QuitMatchMaking(AuthManager.Instance.AccountToken);
+			var task = AuthConnection.Instance.QuitMatchMaking(AuthConnection.Instance.AccountToken);
 			AsyncLoading.Instance.Set(task);
 		}
 		

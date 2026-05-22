@@ -39,12 +39,12 @@ namespace UI.Auth {
 				PassWord = _password.text,
 				TwoFactorAuth = _2fa.text
 			};
-			var task = AuthManager.Instance.SignUp(args);
+			var task = AuthConnection.Instance.SignUp(args);
 			AsyncLoading.Instance.Set(task);
 		}
 
 		public void TwoFactorAuthorization() {
-			var task = AuthManager.Instance.Check2Fa(_mail.text);
+			var task = AuthConnection.Instance.Check2Fa(_mail.text);
 			AsyncLoading.Instance.Set(task);
 		}
 		

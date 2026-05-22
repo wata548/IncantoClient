@@ -8,7 +8,6 @@ namespace InGame.Physic {
 	public class ApplyMovement: MonoBehaviour {
 		//==================================================||Fields	
 		
-		protected static DataModule _module = new();
 		protected Vector _velocity = new();
 		
 		//==================================================||Methods	
@@ -26,11 +25,7 @@ namespace InGame.Physic {
 
 		//==================================================||Unity	
 		private void Awake() {
-			_module.OnReceive += DataReceive;
-		}
-		
-		protected virtual void Update() {
-			_module.Update();
+			LogicConnection.Instance.OnReceive += DataReceive;
 		}
 	}
 }

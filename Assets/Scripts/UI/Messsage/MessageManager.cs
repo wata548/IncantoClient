@@ -11,7 +11,9 @@ namespace UI.Messsage {
 		[SerializeField] private float _interval = 0.1f;
 		[SerializeField] private Message _messagePrefab;
 		private MessagePool _pool;
+		
 		protected override bool IsNarrowSingleton => true;
+		protected override bool AllowAutoGen => false;
 
 		public void Add(Result pResult) {
 			_pool.Add(pResult);

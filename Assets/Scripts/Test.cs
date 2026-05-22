@@ -33,9 +33,8 @@ namespace DefaultNamespace {
 
 		[TestMethod]
 		private static void TestUDPAccuracy(int pCnt) {
-			var a = new DataModule();
 			for (int i = 1; i <= pCnt; i++) {
-				a.SendRaw(i);
+				LogicConnection.Instance.SendRaw(i);
 			}
 		}
 		
