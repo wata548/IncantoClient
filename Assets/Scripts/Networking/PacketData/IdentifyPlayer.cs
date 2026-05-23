@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
 namespace Networking {
-	public class GameStart: PacketData {
+	public class IdentifyPlayer: PacketData {
 		public readonly MatchPlayers Players;
 
-		public GameStart(byte[] pBytes, ref int pIdx) : base(pBytes, ref pIdx) {
+		public IdentifyPlayer(byte[] pBytes, ref int pIdx) : base(pBytes, ref pIdx) {
 			Players = new(pBytes, ref pIdx);
 		}
 		

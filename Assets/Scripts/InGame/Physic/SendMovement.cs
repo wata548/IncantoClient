@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using DefaultNamespace;
 using Extensions;
@@ -8,16 +9,16 @@ namespace InGame.Physic {
 	public class SendMovement: ApplyMovement {
 
 		//==================================================||Fields	
-		private InputChecker _input = new();
 		private float _remainTime = 0;
 		
 		//==================================================||Properties	
-		protected override InputFlags GetInput() => _input.GetInput();
+		protected virtual InputFlags GetInput() => default;
         
 		//==================================================||Methods	
+		//0 ~ 360
+		protected virtual float RotationY() => transform.rotation.eulerAngles.y;
+		
 		private void DataSend() {
-			Debug.Log(GetInput());
-			var rotation = transform.rotation.eulerAngles;
 			var packet = new MoveData {
 				Command = PacketCommand.Move,
 				Id = -1,
@@ -27,14 +28,15 @@ namespace InGame.Physic {
 				Pos = transform.position.ToCustomVector(),
 				Radius = transform.localScale.x / 2f,
 				Velocity = _velocity,
-				Rotation = rotation.y
+				Rotation = RotationY() * (MathF.PI / 180f)
 			};
 			var data = packet.GetBytes().ToArray();
 			LogicConnection.Instance.Send(data);	
 		}
 
 		//==================================================||Unity	
-		private void Update() {
+		protected virtual void Update() {
+			
 			_remainTime -= Time.deltaTime;
 			if (_remainTime > 0)
 				return;
@@ -42,11 +44,11 @@ namespace InGame.Physic {
 			_remainTime = ServerSetting.UpdateTerm;
 			DataSend();
 		}
-        
+		
 #if UNITY_EDITOR
 		private void OnDrawGizmos() {
 			Gizmos.color = Color.red;
-			Gizmos.DrawSphere(
+			Gizmos.DrawWireSphere(
 				transform.position + _velocity.ToUnityVector() * ServerSetting.UpdateTerm, 
 				transform.localScale.x / 2f
 			);

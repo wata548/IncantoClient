@@ -110,14 +110,14 @@ namespace Auth {
 
 		private void Receive(PacketData pPacketData) {
 			switch(pPacketData) {
-				case GameStart start:
+				case IdentifyPlayer identify:
 					IsMatchMaking = false;
 					break;
 			}
 		}
 
 		//==================================================Unity
-		private void Awake() {
+		private void Start() {
 			LogicConnection.Instance.OnReceive += Receive;
 		}
 		

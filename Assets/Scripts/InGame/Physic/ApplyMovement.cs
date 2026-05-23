@@ -11,7 +11,6 @@ namespace InGame.Physic {
 		protected Vector _velocity = new();
 		
 		//==================================================||Methods	
-		protected virtual InputFlags GetInput() => default;
 		
 		private void DataReceive(PacketData pPacket) {
 			if (pPacket.Command != PacketCommand.Move)
@@ -20,12 +19,11 @@ namespace InGame.Physic {
 			var pos = moveData.Pos.ToUnityVector();
 			transform.position = pos;
 			_velocity = moveData.Velocity;
-			transform.rotation = Quaternion.Euler(0, moveData.Rotation, 0);
 		}
 
 		//==================================================||Unity	
-		private void Awake() {
-			LogicConnection.Instance.OnReceive += DataReceive;
+		protected virtual void Awake() {
+			LogicConnection.Instance.OnReceiveInGame += DataReceive;
 		}
 	}
 }

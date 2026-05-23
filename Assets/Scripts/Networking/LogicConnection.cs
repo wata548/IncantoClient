@@ -16,6 +16,7 @@ namespace Networking {
 		public const int ServerPort = 51321;
 
 		public event Action<PacketData> OnReceive;
+		public event Action<PacketData> OnReceiveInGame;
 		
 		private readonly ConcurrentQueue<byte[]> _receives = new();
 		private readonly IPEndPoint _serverAddress;
@@ -34,6 +35,10 @@ namespace Networking {
 
 		
 		//==================================================||Methods	
+
+		public void GameStart() {
+			OnReceiveInGame = null;
+		} 
 		
 		private async Task Receive(CancellationToken pToken) {
 			while (!pToken.IsCancellationRequested) {
@@ -69,6 +74,7 @@ namespace Networking {
 				if(!_receives.TryDequeue(out var data))
 					continue;
 				OnReceive?.Invoke(PacketData.Generate(data));			
+				OnReceiveInGame?.Invoke(PacketData.Generate(data));			
 			}
 		}
 
