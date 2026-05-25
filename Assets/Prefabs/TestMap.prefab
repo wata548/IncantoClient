@@ -253,3 +253,5 @@ MonoBehaviour:
   - {fileID: 8510677392613028718}
   - {fileID: 1784117272710847361}
   - {fileID: 359412499051199822}
+  _playerPrefab: {fileID: 4311750137786257943, guid: 999da2596c6fd304dab818bb85f6d190, type: 3}
+  _otherPlayerPrefab: {fileID: 8541662996494656743, guid: b1bfd7825afc8704382ed2b4d2621202, type: 3}

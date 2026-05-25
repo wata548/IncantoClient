@@ -843,6 +843,7 @@ MonoBehaviour:
   <Tag>k__BackingField: MatchMaking
   _panel: {fileID: 1528339151}
   _quit: {fileID: 208424840}
+  _text: {fileID: 1714069505}
 --- !u!222 &139028971
 CanvasRenderer:
   m_ObjectHideFlags: 0

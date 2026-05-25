@@ -2,6 +2,7 @@ namespace Networking {
 	public enum PacketCommand {
 		//S -> C
 		IdentifyPlayer,
+		WaitOtherPlayer,
 		GameStart,
 		SpawnMagic,
 		SendResult,

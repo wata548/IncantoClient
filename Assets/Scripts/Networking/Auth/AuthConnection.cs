@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DefaultNamespace;
 using Extension;
+using InGame;
 using Networking;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -12,13 +13,15 @@ using UnityEngine;
 namespace Auth {
 	public class AuthConnection: MonoSingleton<AuthConnection> {
 		//==================================================Properties	
-		public bool IsMatchMaking { get; private set; } = false; 
+		public bool IsMatchMaking => _waitStatus.IsMatchMaking;
+		public int ReadiedPlayerCnt => _waitStatus.ReadiedPlayerCnt;
 		public AccountToken AccountToken { get; private set; }
 
 		//==================================================Fields	
 		private readonly HttpClient _client = new();
 		private readonly Uri _serverAddress = new("https://incanto.o-r.kr:7272");
 		private float _remainTime = ServerSetting.UpdateTerm;
+		private readonly WaitStatus _waitStatus = new();
 		
 		//==================================================Methods
 		public void LogOut() {
@@ -74,7 +77,7 @@ namespace Auth {
 			var result = Call("JoinMatch", content);
 			result.CallBackTToT += r => {
 				if (r.Status == Status.Success)
-					IsMatchMaking = true;
+					_waitStatus.EnterMatchMaking();
 				return r;
 			};
 			return result;
@@ -85,7 +88,7 @@ namespace Auth {
 			var result = Call("ExitMatch", content);
 			result.CallBackTToT += r => {
 				if (r.Status == Status.Success)
-					IsMatchMaking = false;
+					_waitStatus.QuitMatchMaking();
 				return r;
 			};
 			return result;
@@ -109,9 +112,16 @@ namespace Auth {
 		}
 
 		private void Receive(PacketData pPacketData) {
-			switch(pPacketData) {
-				case IdentifyPlayer identify:
-					IsMatchMaking = false;
+			switch(pPacketData.Command) {
+				case PacketCommand.WaitOtherPlayer:
+					_waitStatus.Ready(pPacketData.Id);
+					break;
+				case PacketCommand.IdentifyPlayer:
+					if (pPacketData is not IdentifyPlayer identify)
+						break;
+					
+					_waitStatus.StartMatch();
+					Setting.Instance.StartMatch(identify.Match);
 					break;
 			}
 		}
@@ -123,6 +133,26 @@ namespace Auth {
 		
 		private void Update() {
 			WaitMatchMaking();		
+		}
+
+		private class WaitStatus {
+			private bool _isFindingMatch = false;
+			public int ReadiedPlayerCnt { get; private set; } = 0;
+			public bool IsMatchMaking => _isFindingMatch || ReadiedPlayerCnt != 0;
+			
+			public void Ready(int pReadiedPlayerCnt) {
+				if (!_isFindingMatch)
+					return;
+				ReadiedPlayerCnt = pReadiedPlayerCnt;
+			}
+
+			public void EnterMatchMaking() => _isFindingMatch = true;
+			public void QuitMatchMaking() => _isFindingMatch = false;
+			
+			public void StartMatch() {
+				_isFindingMatch = false;
+				ReadiedPlayerCnt = 0;
+			}
 		}
 	}
 }

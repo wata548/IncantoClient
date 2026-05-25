@@ -6,18 +6,11 @@ using UnityEngine.SceneManagement;
 
 namespace InGame {
     public class Setting: MonoSingleton<Setting> {
-        private MatchPlayers _match;
-        private int _playIdx = 0;
+        public MatchPlayers Match { get; private set; }
             
-        public void SetData(MatchPlayers pMatchInfo) {
+        public void StartMatch(MatchPlayers pMatchInfo) {
             
-            _match = pMatchInfo;
-            _playIdx = 0;
-            foreach (var player in _match.Players) {
-                if (player == AuthConnection.Instance.AccountToken.Id)
-                    break;
-                _playIdx++;
-            }
+            Match = pMatchInfo;
             LogicConnection.Instance.GameStart();
             SceneManager.LoadScene("Main");
         }

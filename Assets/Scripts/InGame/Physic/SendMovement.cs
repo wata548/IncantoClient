@@ -6,7 +6,7 @@ using Networking;
 using UnityEngine;
 
 namespace InGame.Physic {
-	public class SendMovement: ApplyMovement {
+	public class SendMovement: ReceiveMovement {
 
 		//==================================================||Fields	
 		private float _remainTime = 0;
@@ -21,7 +21,7 @@ namespace InGame.Physic {
 		private void DataSend() {
 			var packet = new MoveData {
 				Command = PacketCommand.Move,
-				Id = -1,
+				Id = _id,
 				Input = GetInput(),
 				IsPainting = false,
 				MouseDelta = new(),

@@ -28,8 +28,7 @@ namespace InGame.Physic {
             base.Update();
         }
         
-        protected override void Awake() {
-            base.Awake();
+        private void Awake() {
             _camera = Camera.main!;
         }
     }
