@@ -37,7 +37,7 @@ namespace DefaultNamespace {
 				LogicConnection.Instance.SendRaw(i);
 			}
 		}
-		
+
 		[TestMethod]
 		private static void Circle(int pSize) {
 			const string Biomes = "⬛⬜";

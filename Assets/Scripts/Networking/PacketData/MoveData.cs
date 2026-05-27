@@ -24,11 +24,11 @@ namespace Networking {
 	
 	public class MoveData: PacketData {
 		public InputFlags Input { get; set; }
-		public Vector Pos { get; set; }
+		public Vector Pos { get; set; } = new();
 		public float Radius { get; set; }
 		public float Rotation { get; set; }
-		public Vector Velocity { get; set; }
-		public Vector MouseDelta { get; set; }
+		public Vector Velocity { get; set; } = new();
+		public Vector MouseDelta { get; set; } = new();
 		public bool IsPainting { get; set; }
 
 		public override IEnumerable<byte> GetBytes() {

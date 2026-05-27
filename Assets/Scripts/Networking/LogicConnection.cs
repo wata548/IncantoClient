@@ -38,8 +38,8 @@ namespace Networking {
 
 		public void GameStart() {
 			OnReceiveInGame = null;
-		} 
-		
+		}
+
 		private async Task Receive(CancellationToken pToken) {
 			while (!pToken.IsCancellationRequested) {
 				var result = await _client.ReceiveAsync();
@@ -73,8 +73,9 @@ namespace Networking {
 			while (!_receives.IsEmpty) {
 				if(!_receives.TryDequeue(out var data))
 					continue;
-				OnReceive?.Invoke(PacketData.Generate(data));			
-				OnReceiveInGame?.Invoke(PacketData.Generate(data));			
+				var packet = PacketData.Generate(data);
+				OnReceive?.Invoke(packet);			
+				OnReceiveInGame?.Invoke(packet);			
 			}
 		}
 

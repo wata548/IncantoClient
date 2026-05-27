@@ -20,7 +20,7 @@ namespace InGame.Map {
                 idx++;
                 var newPlayer = player == pPlayerId 
                     ? Instantiate(_playerPrefab)
-                    :Instantiate(_otherPlayerPrefab);
+                    : Instantiate(_otherPlayerPrefab);
                 newPlayer.Init(player);
                 newPlayer.transform.position = pos;
             }

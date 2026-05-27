@@ -15,8 +15,6 @@ namespace InGame.Physic {
 		protected virtual InputFlags GetInput() => default;
         
 		//==================================================||Methods	
-		//0 ~ 360
-		protected virtual float RotationY() => transform.rotation.eulerAngles.y;
 		
 		private void DataSend() {
 			var packet = new MoveData {
@@ -24,11 +22,7 @@ namespace InGame.Physic {
 				Id = _id,
 				Input = GetInput(),
 				IsPainting = false,
-				MouseDelta = new(),
-				Pos = transform.position.ToCustomVector(),
-				Radius = transform.localScale.x / 2f,
-				Velocity = _velocity,
-				Rotation = RotationY() * (MathF.PI / 180f)
+				Rotation = RotationY * (MathF.PI / 180f)
 			};
 			var data = packet.GetBytes().ToArray();
 			LogicConnection.Instance.Send(data);	

@@ -10,7 +10,14 @@ namespace InGame.Physic {
         private InputChecker _input = new();
         
        //==================================================||Methods 
-       protected override float RotationY() => _camera.transform.rotation.eulerAngles.y;
+       protected override float RotationY {
+           get => _camera.transform.rotation.eulerAngles.y;
+           set {
+               var rotation = _camera.transform.rotation.eulerAngles;
+               rotation.y = value;
+               _camera.transform.rotation = Quaternion.Euler(rotation);
+           }
+       }
 
        protected override InputFlags GetInput() => _input.GetInput();
 

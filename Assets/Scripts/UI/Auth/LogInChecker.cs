@@ -31,6 +31,8 @@ namespace UI.Auth {
 			_waitMatchMaking = !_waitMatchMaking;
 			if (_waitMatchMaking)
 				ModalBase.GetModal(_matchMakingScreen).Show();
+			else 
+				ModalBase.Close();
 		}
 		
 		private void Update() {
