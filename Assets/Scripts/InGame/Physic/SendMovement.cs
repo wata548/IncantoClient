@@ -21,15 +21,16 @@ namespace InGame.Physic {
 				Command = PacketCommand.Move,
 				Id = _id,
 				Input = GetInput(),
-				IsPainting = false,
-				Rotation = RotationY * (MathF.PI / 180f)
+				Pitch = Pitch * (MathF.PI / 180f),
+				Yaw = Yaw
 			};
 			var data = packet.GetBytes().ToArray();
 			LogicConnection.Instance.Send(data);	
 		}
 
 		//==================================================||Unity	
-		protected virtual void Update() {
+		protected override void Update() {
+			base.Update();
 			
 			_remainTime -= Time.deltaTime;
 			if (_remainTime > 0)

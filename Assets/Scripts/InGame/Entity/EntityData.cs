@@ -13,15 +13,13 @@ namespace InGame.Entity {
 		public event Action<int> OnDeath;
 		//==================================================|| Constructors
        
-		public EntityData(int pId, int pMaxHp, Transform transform) {
+		public EntityData(int pId, int pMaxHp) {
 			Id = pId;
 			MaxHp = pMaxHp;
-			Transform = new(transform);
 		}
         
 		//==================================================||Properties 
 		public readonly int Id;
-		public readonly CustomTransform Transform;
 		public int MaxHp { get; private set; }
 		public int Hp { get; private set; }
         

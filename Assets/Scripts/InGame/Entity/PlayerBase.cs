@@ -6,7 +6,7 @@ namespace InGame.Entity {
         public EntityData Data { get; private set; }
 
         public void SetUp(int pId) {
-            Data = new(pId, _maxHp, transform);
+            Data = new(pId, _maxHp);
         }
 
         private void Awake() {

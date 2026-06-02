@@ -73,7 +73,7 @@ namespace Networking {
 			while (!_receives.IsEmpty) {
 				if(!_receives.TryDequeue(out var data))
 					continue;
-				var packet = PacketData.Generate(data);
+				var packet = PacketData.Deserialize(data);
 				OnReceive?.Invoke(packet);			
 				OnReceiveInGame?.Invoke(packet);			
 			}

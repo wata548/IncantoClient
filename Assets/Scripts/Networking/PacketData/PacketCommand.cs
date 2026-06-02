@@ -3,17 +3,18 @@ namespace Networking {
 		//S -> C
 		IdentifyPlayer,
 		WaitOtherPlayer,
+		PlayerData,
 		GameStart,
 		SpawnMagic,
 		SendResult,
         
 		//C -> S
 		NATPunch,
+		Move,
 		SelectMagic,
 		JudgeMagic,
         
 		//Shared
-		Move,
 		Death,
 		Rebirth,
         

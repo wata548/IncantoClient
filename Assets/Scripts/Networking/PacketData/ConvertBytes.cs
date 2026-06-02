@@ -7,15 +7,14 @@ namespace Networking {
 		public PacketCommand Command { get; set; }
 		public PacketData(){}
 
-		public static PacketData Generate(byte[] pBytes) {
+		public static PacketData Deserialize(byte[] pBytes) {
 			var command = (PacketCommand)BitConverter.ToInt32(pBytes);
 			var idx = 0;
 			return command switch {
 				PacketCommand.NATPunch => new PacketData(pBytes, ref idx),
-				PacketCommand.Move => new MoveData(pBytes, ref idx),
+				PacketCommand.PlayerData => new PlayerPacketData(pBytes, ref idx),
 				PacketCommand.IdentifyPlayer => new IdentifyPlayer(pBytes, ref idx),
 				PacketCommand.WaitOtherPlayer => new PacketData(pBytes, ref idx),
-				PacketCommand.Rebirth => new Data(pBytes, ref idx)
 			};
 		}
 		
