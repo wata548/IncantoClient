@@ -12,7 +12,7 @@ namespace InGame.Physic {
 		private InputChecker _input = new();
         
 		//==================================================||Properties 
-		protected override float Pitch {
+		protected override float Yaw {
 			get => _camera.transform.rotation.eulerAngles.y;
 			set {
 				var rotation = _camera.transform.rotation.eulerAngles;
@@ -21,7 +21,7 @@ namespace InGame.Physic {
 			}
 		}
 
-		protected override float Yaw {
+		protected override float Pitch {
 			get => _camera.transform.rotation.eulerAngles.x;
 			set {
 				var rotation = _camera.transform.rotation.eulerAngles;
@@ -39,8 +39,8 @@ namespace InGame.Physic {
 		private void CameraPositionUpdate() {
 			var delta = Input.mousePositionDelta * _sensibility;
 			var rotation = _camera.transform.rotation.eulerAngles;
-			Yaw = rotation.x - delta.y;
-			Pitch = rotation.y + delta.x;
+			Pitch = rotation.x - delta.y;
+			Yaw = rotation.y + delta.x;
 		}
 
 		protected override void OnSend() =>
@@ -52,7 +52,7 @@ namespace InGame.Physic {
 			_input.Update();
 			base.Update();
 		}
-        
+		
 		private void Awake() {
 			_camera = Camera.main!;
 		}

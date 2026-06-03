@@ -23,8 +23,8 @@ namespace InGame.Physic {
 				Command = PacketCommand.Move,
 				Id = _id,
 				Input = GetInput(),
-				Pitch = Pitch * (MathF.PI / 180f),
-				Yaw = Yaw
+				Yaw = Yaw * (MathF.PI / 180f),
+				Pitch = Pitch
 			};
 			OnSend();
 			var data = packet.GetBytes().ToArray();

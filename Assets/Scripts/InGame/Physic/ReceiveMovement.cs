@@ -47,7 +47,7 @@ namespace InGame.Physic {
 		}
 		
 		//0 ~ 360
-		protected virtual float Pitch {
+		protected virtual float Yaw {
 			get => transform.rotation.eulerAngles.y;
 			set {
 				var rotation = transform.rotation.eulerAngles;
@@ -56,7 +56,7 @@ namespace InGame.Physic {
 			}
 		}
 
-		protected virtual float Yaw { get; set;}
+		protected virtual float Pitch { get; set;}
 
 		//==================================================||Methods	
 
