@@ -5,16 +5,47 @@ using Networking;
 using UnityEngine;
 
 namespace InGame.Physic {
-	//[RequireComponent(typeof(Rigidbody))]
 	public class ReceiveMovement: MonoBehaviour {
 		//==================================================||Fields	
 
-		//protected Rigidbody _rigid;
+		protected const float GravityScale = -23.75f;
 		protected Vector _velocity = new();
 		protected int _id;
-		private const float GravityScale = -23.75f;
+		private int _hp;
+		private int _mp;
 		
 		//==================================================Properties	
+		public int Hp {
+			get => _hp;
+			private set {
+				var delta = value - _hp;
+				if (delta > 0) {
+					OnHeal?.Invoke(delta);
+				}
+				else if (delta < 0) {
+					OnDamaged?.Invoke(-delta);
+				}
+
+				_hp = value;
+				if(_hp == 0)
+					OnDeath?.Invoke(delta);
+			} 
+		}
+		public int Mp {
+			get => _mp; 
+			private set {
+				var delta = value - _mp;
+				if (delta > 0) {
+					OnHealMp?.Invoke(delta);
+				}
+				else if (delta < 0) {
+					OnUseMp?.Invoke(-delta);
+				}
+
+				_mp = value;
+			} 
+		}
+		
 		//0 ~ 360
 		protected virtual float Pitch {
 			get => transform.rotation.eulerAngles.y;
@@ -29,14 +60,18 @@ namespace InGame.Physic {
 
 		//==================================================||Methods	
 
+		public event Action<int> OnHealMp;
+		public event Action<int> OnUseMp;
+		public event Action<int> OnHeal;
+		public event Action<int> OnDamaged;
+		public event Action<int> OnDeath;
+		
 		public void Init(int pId) {
 			_id = pId;
 			LogicConnection.Instance.OnReceiveInGame += DataReceive;
 		}
 		
 		private void DataReceive(PacketData pPacket) {
-			//_rigid ??= GetComponent<Rigidbody>();
-			
 			if (_id != pPacket.Id)
 				return;
 			if (pPacket.Command != PacketCommand.PlayerData)
@@ -46,19 +81,15 @@ namespace InGame.Physic {
 			var pos = player.Pos.ToUnityVector();
 			transform.position = pos;
 			_velocity = player.Velocity;
-			//_rigid.linearVelocity = _velocity.ToUnityVector();
-
-			/*if (moveData.Rotation != -1) {
-				var rotation = moveData.Rotation * 180 / MathF.PI;
-				Debug.Log($"Fix rotation: {RotationY} -> {rotation}");
-				RotationY = rotation;
-			}*/
+			Hp = player.Hp;
+			Mp = player.Mp;
 		}
 
 		//==================================================||Unity	
 
 		protected virtual void Update() {
-			//_velocity.Y += GravityScale * Time.deltaTime;
+			
+			_velocity.Y += GravityScale * Time.deltaTime;
 			var velo = _velocity;
 			velo.Y = MathF.Max(0, velo.Y);
 			transform.position += velo.ToUnityVector() * Time.deltaTime;

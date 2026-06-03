@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Networking;
 using UnityEngine;
@@ -6,6 +5,9 @@ using UnityEngine;
 namespace InGame {
 	public class InputChecker {
 
+		//==================================================Proerperties	
+		public InputFlags InputKeys { get; private set; }
+		
 		//==================================================Fields	
 		private readonly IReadOnlyDictionary<InputFlags, InputType> _inputs =
 			new Dictionary<InputFlags, InputType> {
@@ -18,18 +20,18 @@ namespace InGame {
 			};
 		
 		//==================================================Methods	
-		public InputFlags GetInput() {
-			var result = default(InputFlags);
-			foreach (var (key, data) in _inputs) {
-				if (data.IsClick())
-					result |= key;
-			}
-			return result;
-		}
-
 		public void ChangeKey(InputFlags pFlag, KeyCode pCode) {
 			if (!_inputs.TryGetValue(pFlag, out var type)) return;
 			type.ChangeKey(pCode);
+		}
+
+		public void Refresh() => InputKeys = InputFlags.None;
+		
+		public void Update() {
+			foreach (var (key, data) in _inputs) {
+				if (data.IsClick())
+					InputKeys |= key;
+			}
 		}
 		
 		//==================================================SubClasses

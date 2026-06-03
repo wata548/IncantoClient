@@ -3,49 +3,58 @@ using Networking;
 using UnityEngine;
 
 namespace InGame.Physic {
-    public class Player: SendMovement {
-        [SerializeField] private float _sensibility = 1f;
+	public class Player: SendMovement {
+		
+		//==================================================Properties	
+		[SerializeField] private float _sensibility = 1f;
         
-        protected Camera _camera;
-        private InputChecker _input = new();
+		protected Camera _camera;
+		private InputChecker _input = new();
         
-       //==================================================||Methods 
-       protected override float Pitch {
-           get => _camera.transform.rotation.eulerAngles.y;
-           set {
-               var rotation = _camera.transform.rotation.eulerAngles;
-               rotation.y = value;
-               _camera.transform.rotation = Quaternion.Euler(rotation);
-           }
-       }
+		//==================================================||Properties 
+		protected override float Pitch {
+			get => _camera.transform.rotation.eulerAngles.y;
+			set {
+				var rotation = _camera.transform.rotation.eulerAngles;
+				rotation.y = value;
+				_camera.transform.rotation = Quaternion.Euler(rotation);
+			}
+		}
 
-       protected override float Yaw {
-           get => _camera.transform.rotation.eulerAngles.x;
-           set {
-               var rotation = _camera.transform.rotation.eulerAngles;
-               rotation.x = value;
-               _camera.transform.rotation = Quaternion.Euler(rotation);       
-           }
-       }
+		protected override float Yaw {
+			get => _camera.transform.rotation.eulerAngles.x;
+			set {
+				var rotation = _camera.transform.rotation.eulerAngles;
+				var temp = value;
+				if (temp >= 180)
+					temp -= 360;
+				rotation.x = Math.Clamp(temp, -70f, 70f);
+				_camera.transform.rotation = Quaternion.Euler(rotation);       
+			}
+		}
 
-       protected override InputFlags GetInput() => _input.GetInput();
+		//==================================================Methods	
+		protected override InputFlags GetInput() => _input.InputKeys;
 
-        private void CameraPositionUpdate() {
-            var delta = Input.mousePositionDelta * _sensibility;
-            var rotation = _camera.transform.rotation.eulerAngles;
-            rotation.x += -delta.y;
-            rotation.y += delta.x;
-            _camera.transform.rotation = Quaternion.Euler(rotation);
-        }
+		private void CameraPositionUpdate() {
+			var delta = Input.mousePositionDelta * _sensibility;
+			var rotation = _camera.transform.rotation.eulerAngles;
+			Yaw = rotation.x - delta.y;
+			Pitch = rotation.y + delta.x;
+		}
+
+		protected override void OnSend() =>
+			_input.Refresh();
+
+		//==================================================||Unity 
+		protected override void Update() {
+			CameraPositionUpdate();
+			_input.Update();
+			base.Update();
+		}
         
-       //==================================================||Unity 
-        protected override void Update() {
-            CameraPositionUpdate();
-            base.Update();
-        }
-        
-        private void Awake() {
-            _camera = Camera.main!;
-        }
-    }
+		private void Awake() {
+			_camera = Camera.main!;
+		}
+	}
 }

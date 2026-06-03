@@ -16,6 +16,8 @@ namespace InGame.Physic {
         
 		//==================================================||Methods	
 		
+		protected virtual void OnSend(){}
+		
 		private void DataSend() {
 			var packet = new MoveData {
 				Command = PacketCommand.Move,
@@ -24,6 +26,7 @@ namespace InGame.Physic {
 				Pitch = Pitch * (MathF.PI / 180f),
 				Yaw = Yaw
 			};
+			OnSend();
 			var data = packet.GetBytes().ToArray();
 			LogicConnection.Instance.Send(data);	
 		}
