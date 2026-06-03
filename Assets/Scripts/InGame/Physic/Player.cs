@@ -22,7 +22,7 @@ namespace InGame.Physic {
 		}
 
 		protected override float Pitch {
-			get => _camera.transform.rotation.eulerAngles.x;
+			get => -_camera.transform.rotation.eulerAngles.x;
 			set {
 				var rotation = _camera.transform.rotation.eulerAngles;
 				var temp = value;
@@ -51,6 +51,17 @@ namespace InGame.Physic {
 			CameraPositionUpdate();
 			_input.Update();
 			base.Update();
+
+#if UNITY_EDITOR
+			var yaw = Yaw * Mathf.Deg2Rad;
+			var pitch = Pitch * Mathf.Deg2Rad;
+			var l = MathF.Cos(pitch);
+			var z = MathF.Cos(yaw) * l;
+			var x = MathF.Sin(yaw) * l;
+			var y = MathF.Sin(pitch);
+			var direction = new Vector3(x, y, z) * 100;
+			Debug.DrawRay(transform.position + Vector3.up * 2, direction);
+#endif
 		}
 		
 		private void Awake() {
