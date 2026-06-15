@@ -5,16 +5,17 @@ using Networking;
 using UnityEngine;
 
 namespace InGame.Physic {
+	[RequireComponent(typeof(MeshRenderer))]
 	public class ReceiveMovement: MonoBehaviour {
 		//==================================================||Fields	
-
-		protected const float GravityScale = -23.75f;
+		private static readonly Vector3 _deadPos = new(0, 15, 0);
 		protected Vector _velocity = new();
-		protected int _id;
-		private int _hp;
-		private int _mp;
+		private int _hp = 1;
+		private int _mp = 1;
 		
 		//==================================================Properties	
+		public int Idx { get; private set; }
+		public bool IsDead => Hp <= 0;
 		public int Hp {
 			get => _hp;
 			private set {
@@ -27,7 +28,7 @@ namespace InGame.Physic {
 				}
 
 				_hp = value;
-				if(_hp == 0)
+				if(_hp <= 0)
 					OnDeath?.Invoke(delta);
 			} 
 		}
@@ -67,12 +68,20 @@ namespace InGame.Physic {
 		public event Action<int> OnDeath;
 		
 		public void Init(int pId) {
-			_id = pId;
+			Idx = pId;
 			LogicConnection.Instance.OnReceiveInGame += DataReceive;
+			OnDeath += OnDeathCallback;
+		}
+
+		private void OnDeathCallback(int pV) {
+			GetComponent<MeshRenderer>().enabled = false;
+			transform.position = _deadPos;
 		}
 		
 		private void DataReceive(PacketData pPacket) {
-			if (_id != pPacket.Id)
+			if (IsDead) return;
+			
+			if (Idx != pPacket.Id)
 				return;
 			if (pPacket.Command != PacketCommand.PlayerData)
 				return;
@@ -88,8 +97,8 @@ namespace InGame.Physic {
 		//==================================================||Unity	
 
 		protected virtual void Update() {
-			
-			_velocity.Y += GravityScale * Time.deltaTime;
+			if (IsDead) return;
+			_velocity.Y += ExInputFlags.GravityScale * Time.deltaTime;
 			var velo = _velocity;
 			velo.Y = MathF.Max(0, velo.Y);
 			transform.position += velo.ToUnityVector() * Time.deltaTime;

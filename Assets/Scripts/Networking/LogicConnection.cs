@@ -36,7 +36,7 @@ namespace Networking {
 		
 		//==================================================||Methods	
 
-		public void GameStart() {
+		public void MatchEnd() {
 			OnReceiveInGame = null;
 		}
 

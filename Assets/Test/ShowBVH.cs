@@ -55,7 +55,7 @@ public class ShowBVH : MonoBehaviour {
 		if (_root == null)
 			Start();
 		foreach (var (min, max) in _root.GetAABB()) {
-			var center = (min + max) / 2;
+			var center = (min + max) / 2 + transform.position;
 			var size = max - min;
 			var r = new Random((int)((center.x + 82 *center.y + 53546 * center.z) * size.x * 1000));
 			var c = new Color((float)r.NextDouble() % 1, (float)r.NextDouble() % 1, (float)r.NextDouble() % 1);

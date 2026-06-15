@@ -3,6 +3,7 @@ using System.Linq;
 using Auth;
 using Extension;
 using InGame.Physic;
+using Networking;
 using UnityEngine;
 
 namespace InGame.Map {
@@ -11,6 +12,7 @@ namespace InGame.Map {
 		protected override bool IsNarrowSingleton => true;
 		public bool GameStarted { get; private set; } = false;
 		public Player Player { get; private set; }
+		public ResultData GameResult { get; private set; } = null;
 
 		[SerializeField] private Player _playerPrefab;
 		[SerializeField] private ReceiveMovement _otherPlayerPrefab;
@@ -28,6 +30,14 @@ namespace InGame.Map {
 			}
 		}
 
+		private void SaveResultData(PacketData pData) {
+			if (pData is ResultData result) {
+				GameResult = result;
+				LogicConnection.Instance.MatchEnd();
+				Setting.Instance.MatchEnd();
+			}
+		}
+
 		private void Start() {
 			//TODO: Test Code
 			if (Setting.Instance.Match == null) {
@@ -40,6 +50,7 @@ namespace InGame.Map {
 				Setting.Instance.Match, 
 				AuthConnection.Instance.AccountToken.Id
 			);
+			LogicConnection.Instance.OnReceiveInGame += SaveResultData;
 			GameStarted = true;
 		}
 	}

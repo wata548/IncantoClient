@@ -78,6 +78,7 @@ namespace Extension.SelectableUI {
 
 		private void OnSceneLoad() {
 			_tagStack.Clear();
+			_tagUIs.Clear();
 		}
 
 		private void Awake() {

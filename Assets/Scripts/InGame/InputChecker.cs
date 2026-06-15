@@ -12,6 +12,7 @@ namespace InGame {
 		private readonly IReadOnlyDictionary<InputFlags, InputType> _inputs =
 			new Dictionary<InputFlags, InputType> {
 				{ InputFlags.Focus, new(KeyCode.F, true) },
+				{ InputFlags.Shoot, new(KeyCode.Mouse0, true) },
 				{ InputFlags.Forward, new(KeyCode.W) },
 				{ InputFlags.Backward, new(KeyCode.S) },
 				{ InputFlags.Left, new(KeyCode.A) },

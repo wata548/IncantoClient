@@ -238,3 +238,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sensibility: 0.15
+  _deadSpeed: 20

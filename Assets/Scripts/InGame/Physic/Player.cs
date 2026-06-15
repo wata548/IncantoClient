@@ -1,4 +1,6 @@
 using System;
+using Extension.Test;
+using InGame.Drawing;
 using Networking;
 using UnityEngine;
 
@@ -7,6 +9,8 @@ namespace InGame.Physic {
 		
 		//==================================================Properties	
 		[SerializeField] private float _sensibility = 1f;
+		[SerializeField] private float _deadSpeed = 10f;
+		private DrawByMouse _canvas;
         
 		protected Camera _camera;
 		private InputChecker _input = new();
@@ -37,6 +41,9 @@ namespace InGame.Physic {
 		protected override InputFlags GetInput() => _input.InputKeys;
 
 		private void CameraPositionUpdate() {
+			if (_canvas.IsFocus)
+				return;
+			
 			var delta = Input.mousePositionDelta * _sensibility;
 			var rotation = _camera.transform.rotation.eulerAngles;
 			Pitch = rotation.x - delta.y;
@@ -46,11 +53,34 @@ namespace InGame.Physic {
 		protected override void OnSend() =>
 			_input.Refresh();
 
+		private void DeadMove() {
+			if (!IsDead) return;
+			var input = GetInput();
+			_input.Refresh();
+			var inputVector = input.GetVector(_deadSpeed);
+			inputVector.y = 0;
+			var yaw = Yaw * Mathf.Deg2Rad;
+			var pitch = Pitch * Mathf.Deg2Rad;
+			var cos = MathF.Cos(pitch);
+			var z = cos * MathF.Cos(yaw);
+			var x = cos * MathF.Sin(yaw);
+			var y = MathF.Sin(pitch);
+			var zDirection = new Vector3(x, y, z);
+			var xDirection = new Vector3(z, 0, -x);
+			var delta = zDirection * inputVector.z + xDirection * inputVector.x;
+			//Debug.DrawRay(transform.position, zDirection, Color.red);
+			//Debug.DrawRay(transform.position, xDirection, Color.blue);
+
+
+			transform.position += delta * Time.deltaTime;
+		}
+		
 		//==================================================||Unity 
 		protected override void Update() {
 			CameraPositionUpdate();
 			_input.Update();
 			base.Update();
+			DeadMove();
 
 #if UNITY_EDITOR
 			var yaw = Yaw * Mathf.Deg2Rad;
@@ -66,6 +96,7 @@ namespace InGame.Physic {
 		
 		private void Awake() {
 			_camera = Camera.main!;
+			_canvas = FindAnyObjectByType<DrawByMouse>();
 		}
 	}
 }

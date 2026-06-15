@@ -19,16 +19,18 @@ namespace InGame.Physic {
 		protected virtual void OnSend(){}
 		
 		private void DataSend() {
+			if (IsDead)
+				return;
 			var packet = new MoveData {
 				Command = PacketCommand.Move,
-				Id = _id,
+				Id = Idx,
 				Input = GetInput(),
 				Yaw = Yaw * Mathf.Deg2Rad,
 				Pitch = Pitch * Mathf.Deg2Rad
 			};
 			OnSend();
 			var data = packet.GetBytes().ToArray();
-			LogicConnection.Instance.Send(data);	
+			LogicConnection.Instance.Send(data);
 		}
 
 		//==================================================||Unity	

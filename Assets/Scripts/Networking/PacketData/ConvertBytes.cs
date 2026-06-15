@@ -15,6 +15,9 @@ namespace Networking {
 				PacketCommand.PlayerData => new PlayerPacketData(pBytes, ref idx),
 				PacketCommand.IdentifyPlayer => new IdentifyPlayer(pBytes, ref idx),
 				PacketCommand.WaitOtherPlayer => new PacketData(pBytes, ref idx),
+				PacketCommand.SendResult => new ResultData(pBytes, ref idx),
+				PacketCommand.Question => new QuestionData(pBytes, ref idx),
+				PacketCommand.QuestionResult => new PacketData(pBytes, ref idx),
 			};
 		}
 		
@@ -50,6 +53,13 @@ namespace Networking {
 			pStart += 4;
 			return temp;
 		}
+
+		public string GetString(byte[] pBytes, ref int pStart, int pLen) {
+			var temp = BitConverter.ToString(pBytes, pStart, pLen);
+			pStart += pLen;
+			return temp;
+		}
+		
 		protected bool GetBoolean(byte[] pBytes, ref int pStart) {
 			var temp = BitConverter.ToBoolean(pBytes, pStart);
 			pStart++;

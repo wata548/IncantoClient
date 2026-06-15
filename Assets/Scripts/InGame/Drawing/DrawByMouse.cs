@@ -12,8 +12,9 @@ namespace InGame.Drawing {
 		private float _timer = 0;
 		private int _idx; 
 		private bool _isDrawing = false;
-		private bool _isFocus = false;
 		
+		//==================================================Properties	
+		public bool IsFocus { get; private set; } = false;
 		
 		//==================================================Methods
 		public void StartDraw() {
@@ -28,13 +29,13 @@ namespace InGame.Drawing {
 		}
 
 		public void Focus() {
-			_isFocus = true;
+			IsFocus = true;
 			MoveCursor(Vector2.one * 0.5f);
 		}
 
 		public void CancelFocus() {
 			EndDraw();
-			_isFocus = false;
+			IsFocus = false;
 			MoveCursor(Vector2.one * 0.5f);
 		}
 		
@@ -65,14 +66,17 @@ namespace InGame.Drawing {
 		
 		private void Update() {
 			if (Input.GetKeyDown(KeyCode.F)) {
-				if(!_isFocus) Focus();
+				if(!IsFocus) Focus();
 				else CancelFocus();
 			}
 			
-			if (!_isFocus) return;
+			if (!IsFocus) return;
 			
 			if (Input.GetKeyDown(KeyCode.Mouse0)) StartDraw();
-			if (Input.GetKeyUp(KeyCode.Mouse0)) EndDraw();
+			if (Input.GetKeyUp(KeyCode.Mouse0)) {
+				CancelFocus();
+				//EndDraw();
+			}
 
 			UpdateCanvas();		
 		}

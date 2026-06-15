@@ -7,6 +7,8 @@ namespace Networking {
 		GameStart,
 		SpawnMagic,
 		SendResult,
+		Question, 
+		QuestionResult,
         
 		//C -> S
 		NATPunch,
