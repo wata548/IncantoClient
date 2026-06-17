@@ -14,6 +14,7 @@ namespace Networking {
 		Focus      = 0b10000,
 		Jump       = 0b100000,
 		Shoot      = 0b1000000,
+		FocusEnd   = 0b10000000,
 	}
 
 	public static class ExInputFlags {

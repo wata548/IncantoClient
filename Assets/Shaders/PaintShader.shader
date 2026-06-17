@@ -47,9 +47,9 @@ Shader "Custom/PaintShader"
             fixed4 frag(v2f i): SV_Target
             {
                 fixed4 current = tex2D(_MainTex, i.uv);
-                fixed4 color = length(i.uv - _Pos.xy) / _Radius * 2 > 1
-                                   ? current
-                                   : _Color;
+                fixed4 color = length(i.uv - _Pos.xy) <= _Radius
+                                   ? _Color
+                                   : current;
                 return color;
             }
             ENDCG

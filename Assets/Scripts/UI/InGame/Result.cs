@@ -14,6 +14,8 @@ namespace UI.InGame {
 		private bool _isInit = false; 
 		
 		private void Set(ResultData pData) {
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.None;
 			var rank = pData.GetRank(Map.Instance.Player.Idx);
 			_shower.text = rank switch {
 				1 => "1st",

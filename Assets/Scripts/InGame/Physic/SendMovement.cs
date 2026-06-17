@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using DefaultNamespace;
 using Extensions;
+using InGame.Drawing;
 using Networking;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace InGame.Physic {
 
 		//==================================================||Fields	
 		private float _remainTime = 0;
+		protected DrawByMouse _canvas;
 		
 		//==================================================||Properties	
 		protected virtual InputFlags GetInput() => default;
@@ -26,7 +28,8 @@ namespace InGame.Physic {
 				Id = Idx,
 				Input = GetInput(),
 				Yaw = Yaw * Mathf.Deg2Rad,
-				Pitch = Pitch * Mathf.Deg2Rad
+				Pitch = Pitch * Mathf.Deg2Rad,
+				MouseDelta = _canvas.Pool.ToArray()
 			};
 			OnSend();
 			var data = packet.GetBytes().ToArray();
@@ -43,6 +46,10 @@ namespace InGame.Physic {
             
 			_remainTime = ServerSetting.UpdateTerm;
 			DataSend();
+		}
+
+		protected virtual void Awake() {
+			_canvas = FindAnyObjectByType<DrawByMouse>();
 		}
 		
 #if UNITY_EDITOR

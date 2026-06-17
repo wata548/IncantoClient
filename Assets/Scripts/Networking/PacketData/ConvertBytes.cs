@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Networking {
 	public class PacketData: ConvertBytes {
@@ -55,9 +56,10 @@ namespace Networking {
 		}
 
 		public string GetString(byte[] pBytes, ref int pStart, int pLen) {
-			var temp = BitConverter.ToString(pBytes, pStart, pLen);
+			var temp = pBytes[pStart..(pStart + pLen)].Select(b => (char)b).ToArray();
+			var result = new string(temp);
 			pStart += pLen;
-			return temp;
+			return result;
 		}
 		
 		protected bool GetBoolean(byte[] pBytes, ref int pStart) {

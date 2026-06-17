@@ -10,7 +10,6 @@ namespace InGame.Physic {
 		//==================================================Properties	
 		[SerializeField] private float _sensibility = 1f;
 		[SerializeField] private float _deadSpeed = 10f;
-		private DrawByMouse _canvas;
         
 		protected Camera _camera;
 		private InputChecker _input = new();
@@ -94,9 +93,9 @@ namespace InGame.Physic {
 #endif
 		}
 		
-		private void Awake() {
+		protected override void Awake() {
+			base.Awake();
 			_camera = Camera.main!;
-			_canvas = FindAnyObjectByType<DrawByMouse>();
 		}
 	}
 }
